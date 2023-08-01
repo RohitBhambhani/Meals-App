@@ -44,7 +44,7 @@ function showMealList() {
         if (data.meals) {
             data.meals.forEach((element) => {
                 let isFav = false;
-                for (let index = 0; index < arr.length; index++) {
+                for (let index = 0; index < arr?.length; index++) {
                     if (arr[index] == element.idMeal) {
                         isFav = true;
                     }
