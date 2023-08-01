@@ -60,7 +60,7 @@ function showMealList() {
             class="bg-red-100 border border-red-500 rounded-full text-primary text-sm poppins px-4 inline-block mb-4"
             >${element.strCategory}</span
           ></div>
-          <button id="main${element.idMeal}" class="btn btn-outline-light active" onclick="addRemoveToFavList(${element.idMeal})" style="border-radius:50%"><i class="fa-solid fa-heart fa-xl" style="color: #ff0000;"></i></button>
+          <button id="main${element.idMeal}" class="btn btn-outline-light active" onclick="addRemoveToFavList(${element.idMeal})" style="border-radius:50%"><i class="${isFav ? "fa-solid": "fa-regular"} fa-heart fa-xl" style="color: #ff0000;"></i></button>
         </div>
 
           <img
@@ -107,3 +107,25 @@ function showMealList() {
         
     });
 }
+
+//it adds and remove meals to favourites list
+function addRemoveToFavList(id) {
+    let arr = JSON.parse(localStorage.getItem("favouritesList"));
+    let contain = false;
+    for (let index = 0; index < arr.length; index++) {
+        if (id == arr[index]) {
+            contain = true;
+        }
+    }
+    if (contain) {
+        let number = arr.indexOf(id);
+        arr.splice(number, 1);
+        alert("Meal removed from favourites list");
+    } else {
+        arr.push(id);
+        alert("Meal added to favourites list");
+    }
+    localStorage.setItem("favouritesList", JSON.stringify(arr));
+    showMealList();
+}
+
