@@ -5,6 +5,33 @@ async function fetchMealsFromApi(url, value) {
     return meals;
 }
 
+//it  shows full meal details in main
+async function showMealDetails(id) {
+    let url = "https://www.themealdb.com/api/json/v1/1/lookup.php?i=";
+
+    await fetchMealsFromApi(url, id).then((data) => {
+        const modal = document.getElementById("detailModal")
+        modal.classList.remove("hidden")
+        document.getElementById("detail-heading").innerHTML = data.meals[0].strMeal;
+        document.getElementById("detail-category").innerHTML = "Category : " + data.meals[0].strCategory;
+         document.getElementById("detail-area").innerHTML = "Area : " + data.meals[0].strArea;
+         
+         document.getElementById("detail-instructions").innerHTML =  data.meals[0].strInstructions
+         document.getElementById("detail-video").href =  data.meals[0].strYoutube
+         document.getElementById("detail-article").href = data.meals[0].strSource
+         document.getElementById("detail-image").src =
+         data.meals[0].strMealThumb
+
+    });
+
+}
+
+function closeModal() {
+     const modal = document.getElementById("detailModal")
+        modal.classList.add("hidden")
+}
+
+
 
 // it show's all meals card in main acording to search input value
 function showMealList() {
@@ -47,7 +74,7 @@ function showMealList() {
 
             <button
               class="bg-primary text-white px-8 py-2 focus:outline-none poppins rounded-full mt-24 transform transition duration-300 hover:scale-105"
-              data-modal-target="defaultModal" data-modal-toggle="defaultModal"
+              onclick="showMealDetails(${element.idMeal})"
             >
               More Details
             </button>
