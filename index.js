@@ -37,11 +37,11 @@ async function showFavMealList() {
     let url = "https://www.themealdb.com/api/json/v1/1/lookup.php?i=";
     let html = "";
   
-    if (arr.length == 0) {
+    if (arr?.length == 0) {
         html += `
     `;
     } else {
-        for (let index = 0; index < arr.length; index++) {
+        for (let index = 0; index < arr?.length; index++) {
             await fetchMealsFromApi(url, arr[index]).then((data) => {
                   const element = data.meals[0];
                 html += `
@@ -161,7 +161,7 @@ function showMealList() {
 function addRemoveToFavList(id) {
     let arr = JSON.parse(localStorage.getItem("favouritesList"));
     let contain = false;
-    for (let index = 0; index < arr.length; index++) {
+    for (let index = 0; index < arr?.length; index++) {
         if (id == arr[index]) {
             contain = true;
         }
