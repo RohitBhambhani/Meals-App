@@ -31,6 +31,55 @@ function closeModal() {
         modal.classList.add("hidden")
 }
 
+// it shows all favourites meals in favourites body
+async function showFavMealList() {
+    let arr = JSON.parse(localStorage.getItem("favouritesList"));
+    let url = "https://www.themealdb.com/api/json/v1/1/lookup.php?i=";
+    let html = "";
+  
+    if (arr.length == 0) {
+        html += `
+    `;
+    } else {
+        for (let index = 0; index < arr.length; index++) {
+            await fetchMealsFromApi(url, arr[index]).then((data) => {
+                  const element = data.meals[0];
+                html += `
+                <div
+          class="bg-white border border-gray-100 transition transform duration-700 hover:shadow-xl hover:scale-105 p-4 rounded-lg relative mb-4"
+        >
+         <div class="flex">
+          <div class=" flex-1">
+          <span
+            class="bg-red-100 border border-red-500 rounded-full text-primary text-sm poppins px-4 inline-block mb-4"
+            >${element.strCategory}</span
+          ></div>
+          <button id="main${element.idMeal}" class="btn btn-outline-light active" onclick="addRemoveToFavList(${element.idMeal})" style="border-radius:50%"><i class= "fa-solid fa-heart fa-xl" style="color: #ff0000;"></i></button>
+        </div>
+
+          <img
+            class="w-64 mx-auto transform transition duration-300 hover:scale-105"
+            src="${element.strMealThumb}"
+            alt=""
+          />
+          <div class="flex flex-col items-center my-3 space-y-2">
+            <h1 class="text-gray-900 poppins text-lg">${element.strMeal}</h1>
+            
+
+            <button
+              class="bg-primary text-white px-8 py-2 focus:outline-none poppins rounded-full mt-24 transform transition duration-300 hover:scale-105"
+              onclick="showMealDetails(${element.idMeal})"
+            >
+              More Details
+            </button>
+          </div>
+        </div>
+                `;
+            });
+        }
+    }
+    document.getElementById("favourites-body").innerHTML = html;
+}
 
 
 // it show's all meals card in main acording to search input value
@@ -127,5 +176,6 @@ function addRemoveToFavList(id) {
     }
     localStorage.setItem("favouritesList", JSON.stringify(arr));
     showMealList();
+    showFavMealList();
 }
 
