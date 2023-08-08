@@ -159,7 +159,7 @@ function showMealList() {
 
 //it adds and remove meals to favourites list
 function addRemoveToFavList(id) {
-    let arr = JSON.parse(localStorage.getItem("favouritesList"));
+    let arr = JSON.parse(localStorage.getItem("favouritesList")) || [];
     let contain = false;
     for (let index = 0; index < arr?.length; index++) {
         if (id == arr[index]) {
