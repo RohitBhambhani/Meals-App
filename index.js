@@ -1,50 +1,50 @@
 // it fetches meals from api and return it
 async function fetchMealsFromApi(url, value) {
-    const response = await fetch(`${url + value}`);
-    const meals = await response.json();
-    return meals;
+  const response = await fetch(`${url + value}`);
+  const meals = await response.json();
+  return meals;
 }
 
 //it  shows full meal details in main
 async function showMealDetails(id) {
-    let url = "https://www.themealdb.com/api/json/v1/1/lookup.php?i=";
+  let url = "https://www.themealdb.com/api/json/v1/1/lookup.php?i=";
 
-    await fetchMealsFromApi(url, id).then((data) => {
-        const modal = document.getElementById("detailModal")
-        modal.classList.remove("hidden")
-        document.getElementById("detail-heading").innerHTML = data.meals[0].strMeal;
-        document.getElementById("detail-category").innerHTML = "Category : " + data.meals[0].strCategory;
-         document.getElementById("detail-area").innerHTML = "Area : " + data.meals[0].strArea;
-         
-         document.getElementById("detail-instructions").innerHTML =  data.meals[0].strInstructions
-         document.getElementById("detail-video").href =  data.meals[0].strYoutube
-         document.getElementById("detail-article").href = data.meals[0].strSource
-         document.getElementById("detail-image").src =
-         data.meals[0].strMealThumb
+  await fetchMealsFromApi(url, id).then((data) => {
+    const modal = document.getElementById("detailModal");
+    modal.classList.remove("hidden");
+    document.getElementById("detail-heading").innerHTML = data.meals[0].strMeal;
+    document.getElementById("detail-category").innerHTML =
+      "Category : " + data.meals[0].strCategory;
+    document.getElementById("detail-area").innerHTML =
+      "Area : " + data.meals[0].strArea;
 
-    });
-
+    document.getElementById("detail-instructions").innerHTML =
+      data.meals[0].strInstructions;
+    document.getElementById("detail-video").href = data.meals[0].strYoutube;
+    document.getElementById("detail-article").href = data.meals[0].strSource;
+    document.getElementById("detail-image").src = data.meals[0].strMealThumb;
+  });
 }
 
 function closeModal() {
-     const modal = document.getElementById("detailModal")
-        modal.classList.add("hidden")
+  const modal = document.getElementById("detailModal");
+  modal.classList.add("hidden");
 }
 
 // it shows all favourites meals in favourites body
 async function showFavMealList() {
-    let arr = JSON.parse(localStorage.getItem("favouritesList"));
-    let url = "https://www.themealdb.com/api/json/v1/1/lookup.php?i=";
-    let html = "";
-  
-    if (arr?.length == 0) {
-        html += `
+  let arr = JSON.parse(localStorage.getItem("favouritesList"));
+  let url = "https://www.themealdb.com/api/json/v1/1/lookup.php?i=";
+  let html = "";
+
+  if (arr?.length == 0) {
+    html += `
     `;
-    } else {
-        for (let index = 0; index < arr?.length; index++) {
-            await fetchMealsFromApi(url, arr[index]).then((data) => {
-                  const element = data.meals[0];
-                html += `
+  } else {
+    for (let index = 0; index < arr?.length; index++) {
+      await fetchMealsFromApi(url, arr[index]).then((data) => {
+        const element = data.meals[0];
+        html += `
                 <div
           class="bg-white border border-gray-100 transition transform duration-700 hover:shadow-xl hover:scale-105 p-4 rounded-lg relative mb-4"
         >
@@ -75,31 +75,30 @@ async function showFavMealList() {
           </div>
         </div>
                 `;
-            });
-        }
+      });
     }
-    document.getElementById("favourites-body").innerHTML = html;
+  }
+  document.getElementById("favourites-body").innerHTML = html;
 }
-
 
 // it show's all meals card in main acording to search input value
 function showMealList() {
-    let inputValue = document.getElementById("search-bar").value;
-    let arr = JSON.parse(localStorage.getItem("favouritesList"));
-    let url = "https://www.themealdb.com/api/json/v1/1/search.php?s=";
-    let html = "";
-    let meals = fetchMealsFromApi(url, inputValue);
-    meals.then((data) => {
-        if (data.meals) {
-            data.meals.forEach((element) => {
-                let isFav = false;
-                for (let index = 0; index < arr?.length; index++) {
-                    if (arr[index] == element.idMeal) {
-                        isFav = true;
-                    }
-                }
+  let inputValue = document.getElementById("search-bar").value;
+  let arr = JSON.parse(localStorage.getItem("favouritesList"));
+  let url = "https://www.themealdb.com/api/json/v1/1/search.php?s=";
+  let html = "";
+  let meals = fetchMealsFromApi(url, inputValue);
+  meals.then((data) => {
+    if (data.meals) {
+      data.meals.forEach((element) => {
+        let isFav = false;
+        for (let index = 0; index < arr?.length; index++) {
+          if (arr[index] == element.idMeal) {
+            isFav = true;
+          }
+        }
 
-                    html += `
+        html += `
                 <div
           class="bg-white border border-gray-100 transition transform duration-700 hover:shadow-xl hover:scale-105 p-4 rounded-lg relative"
         >
@@ -109,7 +108,13 @@ function showMealList() {
             class="bg-red-100 border border-red-500 rounded-full text-primary text-sm poppins px-4 inline-block mb-4"
             >${element.strCategory}</span
           ></div>
-          <button id="main${element.idMeal}" class="btn btn-outline-light active" onclick="addRemoveToFavList(${element.idMeal})" style="border-radius:50%"><i class="${isFav ? "fa-solid": "fa-regular"} fa-heart fa-xl" style="color: #ff0000;"></i></button>
+          <button id="main${
+            element.idMeal
+          }" class="btn btn-outline-light active" onclick="addRemoveToFavList(${
+            element.idMeal
+          })" style="border-radius:50%"><i class="${
+            isFav ? "fa-solid" : "fa-regular"
+          } fa-heart fa-xl" style="color: #ff0000;"></i></button>
         </div>
 
           <img
@@ -130,12 +135,11 @@ function showMealList() {
           </div>
         </div>
                 `;
-                
-            });
-            document.getElementById("meals").innerHTML = html;
-            document.getElementById("no-result").innerHTML = "";
-        } else {
-            html += `
+      });
+      document.getElementById("meals").innerHTML = html;
+      document.getElementById("no-result").innerHTML = "";
+    } else {
+      html += `
             <div class="flex h- items-center justify-center p-5 bg-primary w-full">
   <div class="text-center">
     <div class="inline-flex rounded-full bg-yellow-100 p-2">
@@ -148,34 +152,30 @@ function showMealList() {
   </div>
 </div>
             `;
-            document.getElementById("no-result").innerHTML = html;
-            document.getElementById("meals").innerHTML = "";
-
-
-        }
-        
-    });
+      document.getElementById("no-result").innerHTML = html;
+      document.getElementById("meals").innerHTML = "";
+    }
+  });
 }
 
 //it adds and remove meals to favourites list
 function addRemoveToFavList(id) {
-    let arr = JSON.parse(localStorage.getItem("favouritesList")) || [];
-    let contain = false;
-    for (let index = 0; index < arr?.length; index++) {
-        if (id == arr[index]) {
-            contain = true;
-        }
+  let arr = JSON.parse(localStorage.getItem("favouritesList")) || [];
+  let contain = false;
+  for (let index = 0; index < arr?.length; index++) {
+    if (id == arr[index]) {
+      contain = true;
     }
-    if (contain) {
-        let number = arr.indexOf(id);
-        arr.splice(number, 1);
-        alert("Meal removed from favourites list");
-    } else {
-        arr.push(id);
-        alert("Meal added to favourites list");
-    }
-    localStorage.setItem("favouritesList", JSON.stringify(arr));
-    showMealList();
-    showFavMealList();
+  }
+  if (contain) {
+    let number = arr.indexOf(id);
+    arr.splice(number, 1);
+    alert("Meal removed from favourites list");
+  } else {
+    arr.push(id);
+    alert("Meal added to favourites list");
+  }
+  localStorage.setItem("favouritesList", JSON.stringify(arr));
+  showMealList();
+  showFavMealList();
 }
-
