@@ -42,7 +42,7 @@ Check out the live demo of the application at -- https://rohitbhambhani.github.i
 
 ## Authors
 
-- [@imsrohit] (https://github.com/RohitBhambhani)
+- [@rohitbhambhani](https://github.com/RohitBhambhani)
 
 ## Acknowledgments
 
